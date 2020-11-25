@@ -1,10 +1,10 @@
-import React, { useContext } from 'react'
-import { UserContext } from './SearchJobComponent';
+import React from 'react'
 
-const Posts = ({ posts, loading }) => {
 
-    const data = useContext(UserContext);
-    console.log('description', data);
+const Posts = ({ posts, loading, description }) => {
+
+
+    // console.log('description inside posts', description);
     if (loading) {
         return <h2>Loading...</h2>
     }

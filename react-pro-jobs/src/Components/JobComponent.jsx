@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Posts from './Posts'
 import PageComponent from './PageComponent'
-import { UserContext } from './SearchJobComponent';
+// import { UserContext } from './SearchJobComponent';
 
 export default function JobComponent() {
     const [posts, setPosts] = useState([]);
@@ -28,12 +28,33 @@ export default function JobComponent() {
 
 
     }, []);
-    console.log('data', posts);
+
+
     //Get Current Posts 
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost)
     const paginate = (pageNumber) => setCurrentPage(pageNumber)
+
+    const descriptionOnChange = (e) => {
+        let valueEntered = e.target.value;
+        // console.log("value", valueEntered);
+        let postsFiltered = [];
+        postsFiltered = posts.filter(post => (post.title.toLowerCase()).indexOf(valueEntered.toLowerCase()) !== -1);
+        // console.log('posts filtered', postsFiltered);
+        setPosts(postsFiltered);
+    }
+
+    const locationOnChange = (e) => {
+        let valueEntered = e.target.value;
+        console.log("value", valueEntered);
+        let postsFiltered = [];
+        postsFiltered = posts.filter(post => (post.location.toLowerCase()).indexOf(valueEntered.toLowerCase()) !== -1);
+        console.log('posts filtered', postsFiltered);
+        setPosts(postsFiltered);
+    }
+
+    console.log('data', posts);
     return (
         <div>
             {/* {
@@ -59,9 +80,29 @@ export default function JobComponent() {
                     )
                 })
             } */}
-            <UserContext>
-                <Posts posts={currentPosts} loading={loading} />
-            </UserContext>
+
+            <div className="form-container">
+                <form>
+                    <label>Description</label>
+                    <br />
+                    <input type="text" className="input-container" onChange={descriptionOnChange} />
+                    <br />
+                </form>
+                <form>
+                    <label>Location</label>
+                    <br />
+                    <input type="text" className="input-container" onChange={locationOnChange} />
+                </form>
+                <form>
+                    <br />
+                    <input type="checkbox" />
+                    <label >Only Full Time</label>
+
+                </form>
+            </div>
+
+            <Posts posts={currentPosts} loading={loading} />
+
             <PageComponent postsPerPage={postsPerPage} totalPosts={posts.length} paginate={paginate} />
         </div>
     )
